@@ -1,5 +1,37 @@
+import React from 'react'
 import express from 'express'
+
 import { readFileSync } from 'fs'
+import { renderToString } from 'react-dom/server'
+
+import { App } from '../client/app'
+
+const data = {
+  questions: [
+    {
+      questionId: 'Q1',
+      content: 'Should we use jQuery our Fetch for Ajax?',
+    },
+    {
+      questionId: 'Q2',
+      content: 'Lorem ipsum?',
+    },
+  ],
+  answers: [
+    {
+      answerID: 'A1',
+      questionId: 'Q1',
+      upvotes: 2,
+      content: 'jQuery',
+    },
+    {
+      answerID: 'A2',
+      questionId: 'Q2',
+      upvotes: 1,
+      content: 'Lorem',
+    },
+  ],
+}
 
 const app = new express()
 
@@ -7,7 +39,8 @@ app.use(express.static('dist'))
 
 app.get('/', async (_req, res) => {
   const index = readFileSync(`public/index.html`, `utf8`)
-  res.send(index)
+  const rendered = renderToString(<App {...data} />)
+  res.send(index.replace('{{rendered}}', rendered))
 })
 
 console.log('we are live')

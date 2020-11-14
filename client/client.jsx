@@ -1,6 +1,5 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-
-const App = () => <>This is a react project</>
+import { App } from './app'
 
 ReactDOM.render(<App />, document.querySelector('#container'))
