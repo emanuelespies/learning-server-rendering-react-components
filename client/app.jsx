@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const App = ({ questions, answers }) => (
+export const App = ({ questions, answers, handlerModifyAnswersVotes }) => (
   <>
     <h1>Q&A Tool</h1>
 
@@ -14,6 +14,16 @@ export const App = ({ questions, answers }) => (
               .map(({ content, upvotes, answerId }, index) => (
                 <li key={index}>
                   {content} - {upvotes}
+                  <button
+                    onClick={() => handlerModifyAnswersVotes(answerId, 1)}
+                  >
+                    +
+                  </button>
+                  <button
+                    onClick={() => handlerModifyAnswersVotes(answerId, -1)}
+                  >
+                    -
+                  </button>
                 </li>
               ))}
           </ul>

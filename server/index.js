@@ -5,6 +5,7 @@ import { readFileSync } from 'fs'
 import { renderToString } from 'react-dom/server'
 
 import { App } from '../client/app'
+import { handlerModifyAnswersVotes } from '../shared/utility'
 
 const data = {
   questions: [
@@ -19,13 +20,13 @@ const data = {
   ],
   answers: [
     {
-      answerID: 'A1',
+      answerId: 'A1',
       questionId: 'Q1',
       upvotes: 2,
       content: 'jQuery',
     },
     {
-      answerID: 'A2',
+      answerId: 'A2',
       questionId: 'Q2',
       upvotes: 1,
       content: 'Lorem',
@@ -36,6 +37,20 @@ const data = {
 const app = new express()
 
 app.use(express.static('dist'))
+
+app.get('/vote/:answerId', (req, res) => {
+  const { query, params } = req
+  data.answers = handlerModifyAnswersVotes(
+    data.answers,
+    params.answerId,
+    parseInt(query.increment)
+  )
+  res.send('Ok')
+})
+
+app.get('/data', async (_req, res) => {
+  res.json(data)
+})
 
 app.get('/', async (_req, res) => {
   const index = readFileSync(`public/index.html`, `utf8`)
